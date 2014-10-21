@@ -1,0 +1,82 @@
+<html>
+<head>
+</head>
+<body>
+
+	<script>
+
+	var per = "GLOBAL"; // глобальная переменная
+
+	function action() {
+		var per = "LOCAL"; // локальная переменная
+		return per;
+	};
+console.log(action());  // vivedetsa локальная переменная
+
+
+	peremenayya = "Global"; // так тоже можно создавать переменные (глобальные)
+
+	function action2() {
+		peremenayya = "Local"; // локальная переменная
+		peremenayya1 = "local";
+		return [peremenayya,peremenayya1];
+	}
+console.log(action2());
+console.log(peremenayya); // теперь глобальная пременная приняла значение локальной "побочный эффект"
+console.log(peremenayya1);
+
+
+// Вложенные функции и поведение переменных в них
+	var peremenayya3 = "Global scope"; // Глобальная переменная
+
+	function action3() {
+		var peremenayya3 = "Local scope"; // Локальная переменная №1
+			function action4() {
+				var peremenayya3 = "Local scope 2 flover"; // Локальная переменная 2 ур
+				return peremenayya3;
+			}
+		return action4(); // Возвращаем значение вложенной функции = получаем значение action4.
+	}
+console.log(action3()); // == Local scope 2 flover
+console.log(peremenayya3); // == Global scope
+
+
+//
+var o = {x:10};
+	function test(o) {
+		var i = 0;
+		if (typeof o == "object") {
+			var j = 0;
+			for(var k=0; k<10; k++) {
+				console.log(k);
+			}
+			console.log(k);
+		}
+		console.log(j);
+	};
+console.log(test('r'));
+
+
+var amazing = "bold";
+function g () {
+	console.log(amazing);
+	var amazing = 'fuck you!';
+	console.log(amazing);
+};
+console.log(g);
+
+var z = "xxx";
+j = 'ggg';
+this.came = 1;
+console.log(z);
+console.log(j);
+console.log(this.came);
+delete z;
+delete this.came;
+console.log(z);
+console.log(j);
+console.log(this.came); // переменная j удалена
+	</script>
+
+</body>
+</html>

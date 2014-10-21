@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+</head>
+<body>
+	<h1>Hello {{ name }}</h1>
+<script>
+	angular.module('MyApp',[]).run(function($rootScope){
+		$rootScope.name = "Vlad";
+	});
+	angular.module('MyApp').controller('MyCntr',
+		function($scope){
+			$scope.name = "Ari";
+		}
+	);
+</script>
+	<h1 ng-controller="MyCntr">Hello {{name}}</h1>
+</body>
+</html>

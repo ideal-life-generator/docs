@@ -1,0 +1,205 @@
+<html>
+<head>
+</head>
+<body>
+	<script type="text/javascript">
+
+
+
+	// primer programnogo koda
+
+		var x; // peremennay x znachenie 0;
+
+		x = 10; // peremennay x rovn9etsa 10;
+
+		console.log(x);
+
+		x = 1; // chisla
+
+		x = 0.01; // veshestv chisla kak i cselie = odin tip
+
+		x = "hellow world"; // stroki teksta v kavichkah
+
+		x = 'javascript'; // v apostrofi
+
+		x = true; // log znacheni9
+
+		x = false;
+
+		x = null; // net znacheni9
+
+		x = undefined; //podobno null
+
+
+	// objekti i massivi
+
+		//objekti
+		var book = {				//nachalo    // objekt
+			topic: "JavaScript",	//znacheni9	
+			fat: true
+		}							//konec
+
+			console.log(book);
+
+		book.topic		//dostyp k znachenie 'topic'
+		book["fat"]		//drygoy doatyp
+		book.author = "Flanagan"; //sozdat novoe svoystvo
+		book.contents = {}; //pystoy object bez svoystv
+
+			console.log(book.topic);
+			console.log(book["fat"]);
+			console.log(book);
+		//massivi
+		var primes = [2,3,4,5,12];	//massiv 5 znach
+		
+//str 26
+
+//massivi
+
+var massive = [1,2,3,4,5,2,231]; //masiv
+		console.log(massive[6]); //vizov elementa
+		console.log(massive.length); //kol. elementov v massive
+		console.log([massive.length-1]); //vivod predposl masiv
+		massive[3] = 500; //men9em masiv
+		console.log(massive[3]);
+		massive[7] = 50; //dobavitb element v masiv
+		console.log(massive[7]);
+		var empty = [];
+		console.log(empty); // pystoy masiv
+		console.log(empty.length); // dlina 0
+
+	//bolshie masivi
+
+		var points = [ //massiv s dvym9 elementami
+			{x:0, y:6},		//kajd element object
+			{x:10, y:1}
+		];
+		console.log(points[0].y); //vizov elementa
+		console.log(points);
+		console.log(points[1]);
+
+		var data = {
+			trial1: [[1,2],[3,4]],
+			trial2: [[2,3],[4,5]]
+		};
+		console.log(data);
+
+		console.log(points[1].x - points[0].y); //massivi otnimanie
+
+		var count = 0;
+		count += 2 ; //to ge 4to i count +2 = count
+
+		var x = 2, y = 3;
+		x != y; // x ne ravno y
+
+		'two' > 'three' //tw po alfavity boshe chem th = true
+
+		false == (10332 < 0); // = true ; false == false;
+
+		console.log('');
+		console.log('');
+
+		console.log(!(x == y)); //invertiryet logi4eskoe zna4enie
+
+		console.log('');
+		console.log('');
+
+		function plus1(x) {
+			return x*12;
+		};
+
+		var ymnog = function(x) {
+			return x+6;
+		};
+
+		console.log(ymnog(plus1(5))); //funci9 + funci9;
+
+		var a = [];
+		a.push(1,2,3);  // dobavl9et el v massiv
+		console.log(a.reverse());	// predstavl elementu v drugom por9dke
+
+		//teorema pifagora
+
+		var pif = function(a,b) {
+				return Math.sqrt(a*a+b*b);
+		};
+
+		console.log(pif(2,3));
+
+		var coordinat = [
+			{x:10,y:6},
+			{x:3,y:3}
+		];
+
+
+		coordinat.diste = function() {  //metod(metod: fyncii, presvoenie svoystvam otdelnim objectam) vichislenie teorema pifagora coordinat
+				var a1 = this[0]; //perviy massiv
+				var a2 = this[1]; //2-y masiv
+				var a = a2.x - a1.x; //rassto9nie x megdy x
+				var b = a2.y - a1.y; //rassto9nie y megdy y
+				return Math.sqrt(a*a+b*b); //vi4 kvadr korn9
+		};
+
+		console.log(coordinat.diste()); // rassto9nie megdy dvym9 to4kami os9mi koordinat :))
+
+		function Point(x,y) {
+			this.x=x;  //<-- this sohr argyment x v svoystva object Point
+			this.y=y;
+		};
+
+
+		var point1 = new Point(1,10); //tochka s koord 1:10 // var dl9 sozdani9 dl9 nee peremennoi (vsegda chtobi sozd nov ekz funcii nugno teg new)
+
+		console.log(point1);
+
+		/*comment
+		*comment
+		*/
+
+		/*comment
+		comment
+		*/
+
+		d = 6;  //pravilno
+		f = 3;
+
+		d = 6; f = 3; //pravilno
+
+		var a
+		a
+		=
+		3
+		console.log(a); // == var a; a = 3; console.log(a);
+
+		var y = x + f 			//interpretiryetsa kak var y = x + f(a+b).toString();
+		(a+b).toString()
+
+
+		//mogno stavitb ; pered kajdoy instrycciy dl9 podstrahovki
+		var x = 0
+		;[x,x+1,x+2].forEach(console.log)
+
+
+		//zapisi interpretatora !!megdu nimi nelza stavit razruvu 'esli hoceh "return true;" tak i pisat'!! ::bydet ohubka:: return;break;continue
+		true; // == return; true;
+
+		//++ -- kak ++pered slovom, tak i posle++
+		x
+		++		//interpetiryet x; ++y; ne kak x++; y.
+		y
+
+		//vuzov metodov
+
+		//mogno kak
+		a.sort(); //sort(a) prim k "a"; a.sort() - orientir na obect v "a"
+
+		//cisla struky log znac vedyt seba tak, kak esli bu oni obladali metodami
+		//10e26 // 10x10 v step 26
+		//10e-26 // 10x10 v step -26
+		//10%3 // del po modulu
+
+		console.log('');
+		console.log(Math.pow(2,52));
+
+	</script>
+</body>

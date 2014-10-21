@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+<script>
+
+	angular.callbacks._0({
+		'meta':
+	})
+	angular.module('myApp',[])
+		.factory('jsonp',['$http',function($http){
+			return $http.jsonp('lessons/server/server.json?callback=angular.callbacks._0');
+		}])
+		.controller('ServerController',['$http',function($http){
+			$http.success(function(data){
+				$scope.object = data;
+			});
+		}]);
+
+</script>
+</head>
+<body>
+
+	<div ng-controller="ServerController">
+		<ul>
+			<span>name</span>
+		<li ng-repeat="item in object">
+				{{ $index + 1 + ') ' + item.name + ($last?'.':';') }}
+			</li> 
+		</ul>
+	</div>
+
+</body>
+</html>

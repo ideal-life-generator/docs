@@ -1,0 +1,76 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install' ]
+2 info using npm@1.4.9
+3 info using node@v0.10.28
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 warn package.json ApplicationName@1.0.0 No description
+6 warn package.json ApplicationName@1.0.0 No repository field.
+7 warn package.json ApplicationName@1.0.0 No README data
+8 verbose readDependencies using package.json deps
+9 verbose install where, deps [ 'D:\\desktop\\NodeJS\\example\\package',
+9 verbose install   [ 'dependecieName' ] ]
+10 info preinstall ApplicationName@1.0.0
+11 verbose readDependencies using package.json deps
+12 verbose cache add [ 'dependecieName@>3.5.0', null ]
+13 verbose cache add name=undefined spec="dependecieName@>3.5.0" args=["dependecieName@>3.5.0",null]
+14 verbose parsed url { protocol: null,
+14 verbose parsed url   slashes: null,
+14 verbose parsed url   auth: null,
+14 verbose parsed url   host: null,
+14 verbose parsed url   port: null,
+14 verbose parsed url   hostname: null,
+14 verbose parsed url   hash: null,
+14 verbose parsed url   search: null,
+14 verbose parsed url   query: null,
+14 verbose parsed url   pathname: 'dependecieName@%3E3.5.0',
+14 verbose parsed url   path: 'dependecieName@%3E3.5.0',
+14 verbose parsed url   href: 'dependecieName@%3E3.5.0' }
+15 verbose cache add name="dependecieName" spec=">3.5.0" args=["dependecieName",">3.5.0"]
+16 verbose parsed url { protocol: null,
+16 verbose parsed url   slashes: null,
+16 verbose parsed url   auth: null,
+16 verbose parsed url   host: null,
+16 verbose parsed url   port: null,
+16 verbose parsed url   hostname: null,
+16 verbose parsed url   hash: null,
+16 verbose parsed url   search: null,
+16 verbose parsed url   query: null,
+16 verbose parsed url   pathname: '%3E3.5.0',
+16 verbose parsed url   path: '%3E3.5.0',
+16 verbose parsed url   href: '%3E3.5.0' }
+17 verbose addNamed [ 'dependecieName', '>3.5.0' ]
+18 verbose addNamed [ null, '>3.5.0' ]
+19 silly lockFile b9478901-dependecieName-3-5-0 dependecieName@>3.5.0
+20 verbose lock dependecieName@>3.5.0 C:\Users\админ\AppData\Roaming\npm-cache\b9478901-dependecieName-3-5-0.lock
+21 silly addNameRange { name: 'dependecieName', range: '>3.5.0', hasData: false }
+22 verbose url raw dependecieName
+23 verbose url resolving [ 'https://registry.npmjs.org/', './dependecieName' ]
+24 verbose url resolved https://registry.npmjs.org/dependecieName
+25 info trying registry request attempt 1 at 00:33:40
+26 http GET https://registry.npmjs.org/dependecieName
+27 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND
+28 info trying registry request attempt 2 at 00:33:50
+29 http GET https://registry.npmjs.org/dependecieName
+30 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND
+31 info trying registry request attempt 3 at 00:34:50
+32 http GET https://registry.npmjs.org/dependecieName
+33 silly lockFile b9478901-dependecieName-3-5-0 dependecieName@>3.5.0
+34 silly lockFile b9478901-dependecieName-3-5-0 dependecieName@>3.5.0
+35 error network getaddrinfo ENOTFOUND
+35 error network This is most likely not a problem with npm itself
+35 error network and is related to network connectivity.
+35 error network In most cases you are behind a proxy or have bad network settings.
+35 error network
+35 error network If you are behind a proxy, please make sure that the
+35 error network 'proxy' config is set properly.  See: 'npm help config'
+36 error System Windows_NT 6.2.9200
+37 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install"
+38 error cwd D:\desktop\NodeJS\example\package
+39 error node -v v0.10.28
+40 error npm -v 1.4.9
+41 error syscall getaddrinfo
+42 error code ENOTFOUND
+43 error errno ENOTFOUND
+44 verbose exit [ 1, true ]

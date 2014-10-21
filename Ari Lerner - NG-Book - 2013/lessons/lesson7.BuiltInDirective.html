@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+	<script>
+		angular.module('myApp',[]).
+			run(function($rootScope,$timeout){
+				$rootScope.isDisabled = true;
+				$timeout(function(){
+					$rootScope.isDisabled = false;
+				},5000);
+				$timeout(function(){
+					$rootScope.myHref = "http://google.com";
+					$rootScope.imgSrc = "img/yFqSaQdevkg.jpg";
+				},2000);
+			}).
+			controller('SomeController',function($scope){
+				$scope.someBareValue = "hello computer";
+				$scope.someAction = function(){
+					$scope.someBareValue = "hello human, from parent";
+				};
+			}).
+			controller('ChildController',function($scope){
+				$scope.childAction = function(){
+					$scope.someBareValue = "hello human, from child";
+				};
+			});
+	</script>
+</head>
+<body>
+	<div ng-if="2 + 2 === 5">
+		Won't see this DOM node, not even in the source code
+	</div>
+	<div ng-if="2 + 2 === 4">
+		Hi, I do exist
+	</div>
+	<br><hr><br>
+	<input type="text" ng-model="person.name">
+	<div ng-switch on="person.name">
+		<p ng-switch-default>And the winner is</p>
+		<h1 ng-switch-when="Ari">{{ person.name }}</h1>
+	</div>
+	<br><hr><br>
+	<div ng-include="lesson6.Directive.html"
+		 ng-init="name = 'World'">
+		 Hello {{ Name }}
+	</div>
+	<br><hr><br>
+	<div ng-controller="SomeController">
+		{{ someBareValue }}
+		<button ng-click="someAction()">Click to Me</button>
+		<div ng-controller="ChildController">
+			{{ someBareValue }}
+			<button ng-click="childAction()">Click to Me</button>
+		</div>
+	</div>
+	<h1>Wrong Way</h1>
+	<img src="{{ imgSrc }}">
+	<h1>Right Way</h1>
+	<img ng-src="{{ imgSrc }}">
+	<br><hr><br>
+	<a ng-href="{{ myHref }}">I`m feeling lucky, when i load</a>
+	<a href="{{ myHref }}">I`m feeling 404</a>
+	<br><hr><br>
+	<label>Select Two Fish</label>
+	<input type="checkbox"
+		   ng-model="isTwoFish"><br>
+	<select>
+		<option>One Fish</option>
+		<option ng-selected="isTwoFish">Two Fish</option>
+	</select>
+	<br><hr><br>
+	<label>anotherProperty = {{ anotherProperty }}</label>
+	<input type="checkbox"
+		   ng-checked="anotherProperty"
+		   ng-init="anotherProperty = false"
+		   ng-model="anotherProperty"><br>
+	<label>someProperty2 = {{ someProperty2 }}</label>
+	<input type="checkbox"
+		   ng-checked="someProperty2"
+		   ng-init="someProperty2 = true"
+		   ng-model="someProperty2">
+	<br><hr><br>	
+	<input type="text" ng-model="someProperty1"><br>
+	<input type="text"
+		   ng-readonly="someProperty1"
+		   value="Some text here">
+	<br><hr><br>
+	<textarea ng-disabled="isDisabled">Wait 5 seconds</textarea>
+	<br><hr><br>
+	<input type="text" ng-model="someProperty" placeholder="Type to Enable">
+	<button ng-model="button" ng-disabled="!someProperty">A Button</button>
+</body>
+</html>

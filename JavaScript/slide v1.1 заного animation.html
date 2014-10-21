@@ -1,0 +1,121 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<script type="text/javascript">
+
+    var OnReady = (function(){
+        var funcs = [];
+        var ready = false;
+
+            function handler(e){
+                e = event || window.event;
+
+                if(ready) return;
+
+                if(e.type === "readystatechange" && document.readyStare === "complete") return;
+
+                for(var i=0;i<funcs.length;i++)
+                    funcs[i].call(document);
+
+                ready = true;
+                funcs = null;
+            };
+
+            if(document.addEventListener){
+                document.addEventListener('DOMComplateLoad',handler,false);
+                document.addEventListener('readystatechange',handler,false);
+                window.addEventListener('load',handler,false);
+            }
+
+            if(document.attachEvent){
+                document.attachEvent('onreadystatechange',handler);
+                document.attachEvent('onload',handler);
+            }
+
+            return function whenready(f){
+                if(ready) f.call(document);
+                else funcs.push(f);
+            };
+
+    }());
+
+
+	</script>
+
+<style type="text/css">
+
+	#cons { position:absolute;border:1px solid black;left:1100px;top:230px;width:180px;height:70px;color:white;font-size:.7em;padding:5px 8px; }
+
+</style>
+
+<div id="cons"></div>
+
+<style type="text/css">
+
+	#to-animate { position:absolute;top:276px;left:240px;width:810px;height:330px;border:5px solid CornflowerBlue; }
+
+	.point { position:absolute;width:50px;height:50px;border:5px solid lightyellow;; }
+	#point1 { background:maroon; }
+
+
+</style>
+
+<div id="to-animate">
+
+	<div class="point" id="point1"></div>
+
+</div>
+
+
+<style type="text/css">
+
+	* { font:bold 1em Tahoma, Arial; }
+	body { background:url(texture/pinstriped_suit.png); }
+	.btn { position:relative;left:600px;top:30px; }
+
+	#slider { border:3px solid lightgreen;width:719px;height:173px;position:relative;left:300px;top:20px;cursor:pointer; }
+	#slider img { width:225px;height:160px;border:3px solid lightyellow;position:absolute;z-index:0;top:3px; }
+
+</style>
+
+	<div id="slider">
+
+		<img src="slider/1.jpg">
+		<img src="slider/2.jpg">
+		<img src="slider/3.jpg">
+		<img src="slider/4.jpg">
+		<img src="slider/5.jpg">
+		<img src="slider/6.jpg">
+		<img src="slider/7.jpg">
+		<img src="slider/8.jpg">
+
+	</div>
+
+	<button class="btn" id="left">left</button>
+	<button class="btn" id="right">right</button>
+
+<script type="text/javascript">
+
+OnReady(function(){
+
+function conl(html){document.getElementById('cons').innerHTML = html};
+
+
+	var leftButton = document.getElementById('left');
+	var rightButton = document.getElementById('right');
+
+
+var slider = document.getElementById('slider');
+var img = slider.getElementsByTagName('img');
+
+});
+
+</script>
+
+</body>
+</html>
+
+координаты <area coords="179,491, 199,469, 230,469, 249,491" alt="" shape="poly">

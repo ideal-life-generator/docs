@@ -1,0 +1,88 @@
+<!doctype html>
+<html ng-app="databaseApplication">
+<head>
+	<title>Firebase</title>
+	<script src="http://code.angularjs.org/1.2.6/angular.js"></script>
+	<script src="https://cdn.firebase.com/js/client/1.0.6/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js"></script>
+	<script src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>	
+	<script>
+
+		angular.module('databaseApplication',['firebase'])
+			.controller('DatabaseController',function($scope,$firebase,$firebaseAuth){
+				var ref = new Firebase("https://vooduq.firebaseio.com/data");
+				$scope.items = $firebase(ref);
+				$scope.items.$on('change',function(){
+					console.log('Data changed');
+				});
+				$scope.items.$bind($scope,'itemsBind')
+						.then(function(unbind){
+							unbind();
+						});
+				$scope.addToBase = function() {
+					$scope.items[$scope.prop] = $scope.name;
+					$scope.items[$scope.prop].$priority = 10;
+				};
+				$scope.saveBase = function() {
+					$scope.items.$save();
+				};
+				$scope.removeFromBase = function() {
+					$scope.itemsBind.$remove($scope.nameremove);
+				};
+				$scope.auth = $firebaseAuth(ref);
+				$scope.$on('$firebaseAuth:login',function(evt, user){
+					$scope.log = 'User ' + user.id + ' successfully login.';
+				});
+				$scope.$on('$firebaseAuth:logout',function(evt){
+					$scope.log = 'Logout now.';
+				});
+				$scope.$on('$firebaseAuth:error',function(evt,err){
+					$scope.log = 'Some error:\n' + err;
+				});
+				$scope.createUser = function(){
+					$scope.auth.$createUser($scope.email, $scope.password, function(err, user){
+						$scope.log = 1;
+						if(!err) {
+							$scope.log = 'User Id: ' + user.id + ', Email: ' + user.email;
+						}
+					});
+				};
+			});
+
+	</script>
+</head>
+<body ng-controller="DatabaseController">
+	<div>1{{ log }}</div>
+	<a href="#"
+	   ng-click="auth.$login('person')">To log in</a>
+	<a href="#"
+	   ng-click="auth.$logout()">Log out</a>
+	<hr>
+	You mail addres:
+	<br>
+	<input type="email" ng-model="email">
+	<br>
+	You password:
+	<br>
+	<input type="password" ng-model="password">
+	<br>
+	<button ng-click="createUser()">Create user</button>
+	<br><hr>
+	<h2>Hello, you in firebase app</h2>
+	<h3>Add data</h3>
+	Prop: <input type="text"
+				 ng-model="prop">
+	Value: <input type="text"
+				 ng-model="name">
+	<button ng-click="addToBase()">Add data</button>
+	<button ng-click="saveBase()">Save data</button>
+	<h3>Remove data</h3>
+	Name: <input type="text"
+				 ng-model="nameremove">
+	<button ng-click="removeFromBase()">Remove data</button>
+	<hr>
+	<pre>{{ items }}</pre>
+	<hr>
+	<pre>{{ auth }}</pre>
+</body>
+</html>

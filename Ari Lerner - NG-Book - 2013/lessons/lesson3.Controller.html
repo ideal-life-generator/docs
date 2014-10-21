@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+</head>
+<body>
+<script>
+	angular.module('MyApp',[]).controller('FirstController',function($scope){
+		$scope.counter = 0;
+		$scope.add = function(amount){ $scope.counter += amount; };
+		$scope.subtract = function(amount){ $scope.counter -= amount; };
+	}).controller('ObjectController',function($scope){
+		$scope.person = {
+			name: 'Ari Lerner'
+		};
+	}).controller('ParentController',function($scope){
+		$scope.person = { greeted: false };
+	}).controller('ChildController',function($scope){
+		$scope.sayHello = function(){
+			$scope.person.name = "Ari Lerner";
+			$scope.person.greeted  = true;
+		};
+	});
+</script>
+	<div ng-controller="ParentController">
+		<div ng-controller="ChildController">
+			<a ng-click="sayHello()">Say hello</a>
+		</div>
+		{{ person }}
+	</div>
+	<div ng-controller="ObjectController">
+		<h1>{{ person }}</h1>
+		and their name:
+		<h2>{{ person.name }}</h2>
+	</div>
+	<div ng-controller="FirstController">
+		<h4>The simplest adding machine ever</h4>
+		<button ng-click="add(1)">Add</button>
+		<a ng-click="subtract(1)">Subtract</a>
+		<h4>Current count: {{ counter }}</h4>
+	</div>
+</body>
+</html>

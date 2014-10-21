@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+	<script src="lib/restangular.min.js"></script>
+	<script src="lib/lodash.compat.min.js"></script>
+<script>
+
+	angular.module('myApp',['restangular'])
+		.config(function(RestangularProvider){
+			// RestangularProvider.setBaseUrl('server');
+			// RestangularProvider.addElementTransformer('lessons',function(element){
+			// 	element.date = new Date();
+			// 	return element;
+			// });
+			// RestangularProvider.setResponseInterceptor(function(data,operation,what,url,response,deffered){
+			// 	console.log(data,'\n',operation,'\n',what,'\n',url,'\n',response,'\n',deffered);
+			// 	return data;
+			// });
+			// RestangularProvider.setRequestInterceptor(function(elem,operation,what){
+			// 	console.log(elem,'\n',operation,'\n',what);
+			// });
+			// RestangularProvider.setRestangularFields({
+			// 	id: '_id.$oid'
+			// });
+			// RestangularProvider.setErrorInterceptor(function(rest){
+			// 	console.log(rest);
+			// 	return false;
+			// });
+			// RestangularProvider.setParentless(true);
+			RestangularProvider.setRestangularFields({
+				salfLink: 'link.href'
+			});
+		})
+		.factory('message',['Restangular',function(Rest){
+			// One
+			// return Rest.one('lessons/server/server.json');
+			// Two
+			// return Rest.one('lessons/server','server1');
+			// Three
+			return Rest.one('lessons/server');
+		}])
+		.controller('MessageController',function($scope,message,Restangular){
+			// One
+			// $scope.object = message.getList().$object;
+			// Two
+			// $scope.nServer = message.id;
+			// console.log(message.get('server.json'));
+			$scope.object = message.getList('server.json').$object;
+			
+			// message.getList('server.json').then(function(data){
+			// 	console.log(message);
+			// });
+			// Three
+			// message.getList('server.json',{
+			// 	role: 'admin'
+			// },{
+			// 	'x-user': 'admin'
+			// });
+		});
+
+</script>
+</head>
+<body>
+
+	<div ng-controller="MessageController">
+		<ul>
+			<span>{{ firstName }}</span>
+		<li ng-repeat="item in object">
+				{{ $index + 1 + ') ' + item.name + ($last?'.':';') }}
+			</li> 
+		</ul>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<style type="text/css">
+
+	body { background:url(http://subtlepatterns.com/patterns/denim.png); }
+	#fileDropTarget { cursor:pointer;width:256px;height:256px;background:url(http://info2012.webege.com/images/folder-download.png);margin:300px auto; }
+
+</style>
+
+
+	<div data-uploadto="/index.php" id="fileDropTarget"></div>
+
+<script type="text/javascript">
+
+document.getElementById('fileDropTarget').ondragenter = function(e){
+	console.log(e.dataTransfer.files);
+};
+document.getElementById('fileDropTarget').ondragover = function(e){
+	console.log("We over to drag");
+};
+document.getElementById('fileDropTarget').ondragleave = function(e){
+	console.log("We have leave at the download block");
+};
+document.getElementById('fileDropTarget').ondrop = function(e){
+	console.log("Taked element");
+};
+
+	window.onload = function(){
+
+		var target = document.getElementById('fileDropTarget');
+		var url = target.getAttribute('data-uploadto');
+
+		function createFileUploadDropTarget(traget,url){
+			var uploading = false; // подставная переменная скачивания файла
+
+			console.log(target,url);
+
+			target.ondragenter = function(e){
+				console.log('dragenter');
+				if(uploading) return; // если в данный момент файл скачивается, вернуть управление функции и игнорировать новые вхождения
+				var types = e.dataTransfer.types;
+
+				if(types &&
+					((types.contains && types.contains("Files")) ||
+					 (types.ondexOf && types.indexOf("Files") !== -1))){
+					target.classList.add('wantdrop');
+					return false;
+				}
+			};
+
+			target.ondragover = function(e){ if(!uploading) return false; };
+			target.ondragleave = function(e){ if(!uploading) target.classList.remove('wantdrop'); }
+
+			target.ondrop = function(e){
+				if(uploading) return false;
+				var files = e.dataTransfer.files;
+				if(files && files.length){
+					uploading = true;
+					var message = "Выгружаются файлы:<ul>";
+
+						for(var i = 0; i < files.length; i++)
+							message += "<li>" + files[i].name + "</li>"
+						message += "</ul>";
+
+						target.innertHTML = message;
+						target.classList.remove('wantdrop');
+						target.classList.add('uploading');
+
+					var request = new XMLHttpRequest();
+					request.open('POST',url);
+					var body = new FormData();
+					for(var i=0;i<files.length;i++) body.append(i,files[i]);
+						request.upload.onprogress = function(e){
+							if(e.lengthComputable){
+								target.innertHTML = message +
+								Math.round(e.loaded/e.total*100) +
+								"% Завершено";
+							}
+						};
+						request.upload.onload = function(e){
+							uploading = false;
+							target.classList.remove('uploading');
+							target.innerHTML = "Отбуксируйте сюда файлы для выгрузки";
+						};
+						request.send(body);
+
+						return false;
+				}
+				target.classList.remove('wantdrop');
+			};
+
+		}
+
+	};
+
+</script>
+
+</body>
+</html>

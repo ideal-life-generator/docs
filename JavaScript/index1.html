@@ -1,0 +1,38 @@
+<html>
+<head>
+</head>
+<body>
+
+<script>
+
+	console.log(parseInt('33 zzz xxxxcc 25')); // интерпретирует целое число в строке == 33 и то, если оно 1, короче переводит из одого формата чисел в другой(десятичные, 8тичные и т.д.)
+
+	console.log(parseFloat('10.7654678 ппрп акккк xxxdffg 6.88952')); // то же самое, с дробью
+
+	console.log(parseInt('875.9684')); // === 875
+
+	console.log(parseInt(0xff)); // == 255 хренаричная система счисления перевелась в десятичную
+
+	console.log(parseInt('34',16)); // 'число',16 система счисления(от 2 до 32)
+
+
+
+	console.log({x:0,y:25,z:1}.toString()); // => [object Object] переводит в обьект
+
+	console.log([1,7,3].toString()); // => "1,7,3" строка
+
+	console.log((function(x){f(x);}).toString()); // => ??
+
+	console.log(/\d+/g.toString());
+
+	console.log(new Date(2013,5,8).toString()); // выдаст дату в нормальном формате
+
+
+	console.log(valueOf([2,1])); // не работает..
+
+</script>
+
+<img class="imgSmall" src="assets/images/3DAnimat/3dbutton.gif"/>
+
+</body>
+</html>

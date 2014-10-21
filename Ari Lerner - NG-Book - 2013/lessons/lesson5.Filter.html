@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+</head>
+<body>
+<script>
+	angular.module('myApp',[]).
+	controller('FilterController',['$scope','$filter',
+		function($scope,$filter){
+			setInterval(function(){
+				$scope.$apply(function(){
+					$scope.today = new Date()
+				});
+			});
+			$scope.isCapitalized = function(str){
+				return str[0] === str[0].toUpperCase();
+			};
+		}
+	]).filter('capitalize',function(){
+		return function(input){
+			if(input)
+				return input[0].toUpperCase() +
+					input.slice(1);
+		};
+	}).directive('ensureUnique',function($http){
+		return {
+			require: 'ngModel',
+			link: function(scope,ele,attrs,c){
+				$scope.$watch(attrs.ngModel,function(){
+					$http({
+						method: 'POST',
+						url: '/api/check/' + attrs.ensureUnique,
+						data: {'field': attrs.ensureUnique}
+					}).success(function(data,status,headers,cfg){
+						c.$setValidity('unique',data.isUnique);
+					}).error(function(data,status,headers,cfg){
+						c.$setValidity('unique', false);
+					});
+				})
+			}
+		};
+	}).directive('ensureUnique',function($http){
+		return {
+			require: 'ngModel',
+			link: function(scope,ele,attrs,c){
+				$scope.$watch(attrs.ngModel,function(n){
+					if(!n) return;
+					$http({
+						method: 'POST',
+						url: '/api/check/' + attrs.ensureUnique,
+						data: {'field': attrs.ensureUnique}
+					}).success(function(data){
+						c.setValidity('unique',data.isUnique);
+					}).error(function(data){
+						c.setValidity('unique',false);
+					});
+				});
+			}
+		};
+	}).controller('signupController',function($scope){
+		$scope.submitted = false;
+		$scope.signupForm = function(){
+			if ($scope.signup_form.$valid) { // Submit as normal
+				
+			} else {
+				$scope.signup_form.submitted = true;
+			}
+		};
+	}).directive('ngFocus',[function(){
+		var FOCUS_CLASS = 'ng-focused';
+		return {
+			restrict: 'A',
+			require: 'ngModel',
+			link: function(scope,element,attrs,ctrl){
+				ctrl.$focused = false;
+				element.bind('focus',function(evt){
+					element.addClass(FOCUS_CLASS);
+					scope.$apply(function(){
+						ctrl.$focused = true;
+					});
+				}).bind('blur',function(evt){
+					element.removeClass(FOCUS_CLASS);
+					scope.$apply(function(){
+						ctrl.$focused = false;
+					})
+				});
+			}
+		};
+	}]);
+</script>
+<style>
+	.error {
+		border:2px solid red;
+	}
+</style>
+	<form name="signup_form"
+		  ng-submit="signupForm()"
+		  ng-controller="signupController"
+		  novalidate>
+		<fieldset>
+			<legend>Signup</legend>
+			<div class="row">
+				<div class="large-12 columns">
+					<label>You name</label>
+					<input type="text"
+						   placeholder="Name"
+						   name="name"
+						   ng-class="{ error: signup_form.name.$dirty && signup_form.name.$invalid }"
+						   ng-model="signup.name"
+						   ng-minlength="3"
+						   ng-maxlength="20"
+						   ng-focus
+						   reqired>
+					<div class="error"
+						 ng-show="signup_form.name.$dirty && signup_form.name.$invalid && !signup_form.name.$focused">
+						<small class="error"
+							   ng-show="signup_form.name.$error.required">
+							You name is required.
+						</small>
+						<small class="error"
+							   ng-show="signup_form.name.$error.minlength">
+							Your name is required to be at least 3 characters
+						</small>
+						<small class="error"
+							   ng-show="signup_form.name.$error.maxlength">
+							Your name cannot be longer than 20 characters
+						</small>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-12 columns">
+					<label>You email</label>
+					<input type="email"
+						   placeholder="Email"
+						   name="email"
+						   ng-model="signup.email"
+						   ng-minlength="3"
+						   ng-maxlength="20"
+						   required>
+					<div class="error"
+						 ng-show="signup_form.email.$dirty && signup_form.email.$invalid && signup_form.submitted">
+						<small class="error"
+							   ng-show="signup_form.email.$error.email">
+							That is not a valid email. Please input a valid email.
+						</small>
+						<small class="error"
+							   ng-show="signup_form.email.$error.required">
+							Your email is required.
+						</small>
+						<small class="error"
+							   ng-show="signup_form.email.$error.minlength">
+							Your email is required to be at least 3 characters
+						</small>
+						<small class="error"
+							   ng-show="signup_form.email.$error.maxlength">
+							Your email cannot be longer than 20 character
+						</small>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="large-12 columns">
+					<label>Username</label>
+					<input type="text"
+						   placeholder="Desired Username"
+						   name="username"
+						   ensure-unique="username"
+						   ng-model="signup.username"
+						   ng-minlength="3"
+						   ng-maxlength="20"
+						   required>
+					<div class="error"
+						 ng-show="signup_form.username.$dirty && signup_form.username.$invalid && signup_form.submitted">
+						<small class="error"
+							   ng-show="signup_form.username.$error.unique">
+							That username is taken, please try another
+						</small>
+						<small class="error"
+							   ng-show="signup_form.username.$error.required">
+							Please input a username
+						</small>
+						<small class="error"
+							   ng-show="signup_form.username.$error.minlength">
+							Your username is required to be at least 3 characters
+						</small>
+						<small class="error"
+							   ng-show="signup_form.username.$error.maxlength">
+							Your username cannot be longer than 20 character
+						</small>
+					</div>
+				</div>
+			</div>
+			<button type="submit"
+					class="button radius">Submit</button>
+		</fieldset>
+	</form>
+
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<hr>
+	<br><br><br>
+	<div ng-controller="FilterController">
+		<form name="form" novalidate>
+			<input ng-pattern="/\w+\@\w+\.\w{0,6}/" ng-minlength="6" ng-maxlength="16" required type="text">
+			<input name="age" type="number">
+			<input type="url">
+			<label name="email">You email</label><br>
+			<input type="text" name="email" ng-model="email" placeholder="Email Address">
+		</form>
+		<br><hr>
+		<input ng-model="name"
+			   placeholder="Send you name please">
+		{{ name }}
+		<br>
+		{{ 101.110203 | number:3 }}
+		<br>
+		{{ 100 | currency }}
+		<hr>
+		{{ today | date:'yyyy dd HH:m:ss a sss' }}
+		<br>
+		<hr>
+		{{ ['Ari', 'Lerner', 'Likes', 'To', 'Eat', 'Pizza'] | filter:'a' }}
+		<br>
+		{{ [{
+			'name': 'Ari',
+			'City': 'San Francisco',
+			'favorite food': 'Pizza'
+			}, {
+			'name': 'Nate',
+			'City': 'San Francisco',
+			'favorite food': 'indian food'
+			}] | filter:{'favorite food': 'Pizza'} }}
+		<br>
+		{{ ['Ari', 'likes', 'to', 'travel', 'Vlad'] | filter:isCapitalized }}
+		<br>
+		{{ ['Ari', 'likes', 'to', 'travel', 'Vlad'] | filter:isCapitalized:false }}
+		<br>
+		<hr>
+		{{ { name: 'Ari', City: 'San Francisco'} | json }}
+		<br>
+		<hr>
+		{{ 'Hello my beatiful friend' | limitTo:-6 }}
+		<br>
+		{{ ['a','b','c','d','e'] | limitTo:-1 }}
+		<br>
+		<hr>
+		{{ "San Francisco is very cloudy" | lowercase }}
+		<br>
+		<hr>
+		{{ 123456789 | number }}
+		<br>
+		{{ 1234.56789 | number:2 }}
+		<br>
+		<hr>
+		{{ [{
+			'name': 'Ari',
+			'status': 'awake'
+			}, {
+			'name': 'Q',
+			'status': 'sleeping'
+			}, {
+			'name': 'Nate',
+			'status': 'awake'
+			}] | orderBy: 'name' : true }}
+		<br>
+		<hr>
+		{{ "San Francisco is very cloudy" | uppercase }}
+		<br>
+		<hr>
+		{{ "VLAD" | lowercase | capitalize }}
+	</div>
+<!-- проблема в том, что я не трахнул свою сестру, мне запретили секс, секс для меня это страх. и только она может мне помочь, наверно. она верит в меня -->
+</body>
+</html>

@@ -1,0 +1,225 @@
+// $slim-border: 1px solid black;
+// $normal-border: 3px solid black;
+// $bold-border: 5px solid black;
+
+// body {
+//   border: $bold-border;
+// }
+
+// table {
+//   $normal: 100px;
+//   border: $slim-border;
+//   td {
+//     width: $normal;
+//   }
+// }
+
+// button {
+//   border: $normal-border;
+// }
+
+// $somecolor: #abcdef;
+
+// div {
+//   border: 3px solid $somecolor;
+// }
+
+// $highlight-color: #abcdef;
+// $highlight-border: 1px $highlight-color solid;
+
+// aside {
+//   border: $highlight-border;
+// }
+
+// $some_color: #333;
+
+// span {
+//   color: $some-color;
+// }
+
+// #content {
+//   article {
+//     h1 { color: #333 }
+//     p { margin-bottom: 1.4em }
+//   }
+//   aside { background-color: #eee }
+// }
+
+// #content article {
+//   h1 { color: #333 }
+//   p { margin-bottom: 1.4em }
+//   aside { background-color: #eee }
+// }
+
+// #content {
+//   background-color: #333;
+//   aside { background-color: #eee }
+// }
+
+// article a {
+//   color: blue;
+//   body.ie & { color: red }
+// }
+
+// button, .button {
+//     margin: 0;
+// }
+
+// .container {
+//   h1, h2, h3 { margin-bottom: .8em }
+// }
+
+// nav, aside {
+//   a { color: blue }
+// }
+
+// header + p { font-size: 1.1em }
+
+ // article ~ div { border-top: 1px dashed #ccc; }
+
+// article {
+//   ~ article { border-top: 1px dashed #ccc }
+//   > section { background-color: #eee }
+//   dl > {
+//     dt { color: #333 }
+//     dd { color: #555 }
+//   }
+//   nav + & { margin-top: 0 }
+// }
+
+// p {
+//   border: {
+//     width: 3px;
+//     style: solid;
+//     color: #ccc;
+//   }
+// }
+
+// span {
+//   border: solid black {
+//     left: 1px
+//   }
+// }
+
+// $some-color: white;
+// $some-color: blue !default;
+
+// a {
+//   color: $some-color;
+// }
+
+// body {
+//   color: #000; // color of the body
+//   background-color: #fff; /* color of the background */
+// }
+
+// @mixin border-radius {
+//   -moz-border-radius: 5px;
+//   -webkit-border-radius: 5px;
+//   border-radius: 5px;
+// }
+
+// button {
+//   background-color: #000;
+//   border: 2px solid maroon;
+//   @include border-radius;
+// }
+
+
+// @mixin no-list {
+//   list-style: none;
+//   margin: none;
+//   &:hover {
+//     border: 1px solid red;
+//   }
+//   li {
+//     margin: 6px 0;
+//   }
+// }
+
+// .list ul {
+//   @include no-list;
+// }
+
+// @mixin link-color($normal, $hover, $visited) {
+//   color: $normal;
+//   &:hover { color: $hover; }
+//   &:visited { color: $visited; }
+// }
+
+// a {
+//   @include link-color($normal: blue, $hover: red, $visited: green);
+// }
+
+// a.a {
+//   @include link-color(blue, red, green);
+// }
+
+// @mixin link-colors($normal, $hover: $normal, $visited: $normal)
+// {
+//   color: $normal;
+//   &:hover { color: $hover; }
+//   &:visited { color: $visited; }
+// }
+
+// a {
+//   @include link-colors(red, blue);
+// }
+
+// @mixin button-box($width: 100px, $height: 60px) {
+//   widows: $width;
+//   height: $height;
+//   background-color: black;
+//   color: white;
+//   border: 3px solid darkgreen;
+//   border-radius: 5px;
+//   -moz-border-radius: 5px;
+//   -webkit-border-radius: 5px;
+//   &:hover {
+//     background-color: white;
+//     color: black;
+//     border: 3px solid maroon;
+//   }
+// }
+
+// .accept {
+//   @include button-box;
+// }
+
+// .check {
+//   @include button-box(,30px);
+// }
+
+// .error {
+//   border: 1px red;
+//   background-color: #fdd;
+// }
+
+// .error a {
+//   color: red;
+// }
+
+// h1.error {
+//   margin: 30px 0;
+// }
+
+// .seriousError {
+//   @extend .error;
+//   border-width: 3px;
+// }
+
+// #a, .b {
+//   color: white;
+// }
+
+// .c {
+//   color: red;
+// }
+
+// .disabled {
+//   color: gray;
+//   @extend #a;
+// }
+
+.bip.baz { a:b;}
+.foo.bar { @extend.baz;}

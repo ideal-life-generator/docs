@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Optimiz</title>
+	<script src="lib/angular.min.js"></script>
+	<script src="lib/bindonce.js"></script>
+	<script>
+
+		angular.module('myApp',['pasvaz.bindonce'])
+			.factory('SessionService', function($q, $http) {
+				var service = {
+					user_id: null,
+					getCurrentUser: function() {
+					}
+				}
+				return service;
+			})
+
+
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

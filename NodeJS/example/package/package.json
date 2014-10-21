@@ -1,0 +1,7 @@
+{
+	"name": "ApplicationName",
+	"version": "1.0.0",
+	"dependencies": {
+		"dependecieName": ">3.5.0"
+	}
+}

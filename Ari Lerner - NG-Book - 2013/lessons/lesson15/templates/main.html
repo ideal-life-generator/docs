@@ -1,0 +1,28 @@
+<div class="container">
+	<h1>Home</h1>
+	<div ng-show="!user" class="row">
+		<div class="col-md-12">
+			<h2>Signup or login to ngroad</h2>
+			<div google-signin
+				 client-id='391118764200'
+				 after-signin="signeId(oauth)"></div>
+		</div>
+	</div>
+	<div ng-show="user">
+		<pre>{{ user | json }}</pre>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div file-upload="onFile(files)"></div>
+		</div>
+	</div>
+	<div ng-show="images">
+		<div class="col-sm-6 col-sm-4"
+			 ng-repeat="image in images">
+			<div class="thumbnail">
+				<img ng-click="sellImage(image)"
+					 data-ng-src="{{ image.itemUrl }}"/>
+			</div>
+		</div>
+	</div>
+</div>

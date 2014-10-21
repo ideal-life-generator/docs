@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style type="text/css">body { font:9px sans-serif; }</style>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript">
+
+		if(window.addEventListener)
+			window.addEventListener('message',handleMessage,false);
+		else
+			window.attachEvent('onmessage',handleMessage,false);
+
+		function handleMessage(e){
+			if(e.source !== window.parent) return;
+			var searchterm = e.data;
+			jQuery.getJSON("http://search.twitter.com/search.json?callback=?",
+				{ q:searchterm },
+				function(data){
+					var tweets = data.results;
+					var escaped = searchterm.replace('<','&lt;');
+					var html = '<h2>' + escaped + '</h2>';
+					if(tweets.length == 0){
+						html += "No tweets found";
+					}
+					else{
+						html += '<dl>';
+						for(var i=0;i<tweets.length;i++){
+							var tweet = tweets[i];
+							var text = tweet.text;
+							var from = tweet.from_user;
+							var tweeturl = 'http://twitter.com/#!/' +
+								from + '/status' + tweet.id_str;
+							html += '<dt><a target="_blank" href="' +
+								tweeturl + "'>" + tweet.from_user +
+								"</a></dt><dd>" + tweet.text + "</dd>";
+						}
+					html += "</dl>";
+					}
+					document.body.innerHTML = html;
+				});
+		};
+		$(function(){
+			window.parent.postMessage('Twitter Search v0.1','*');
+		});
+
+	var load = new Worker('Works.js');
+	load.postMessage('HEADS');
+	load.onmessage = function(ev){
+		alert(ev.data);
+	}
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

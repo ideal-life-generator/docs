@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+function inherit(p) {
+	if (p == null) throw console.log('Переменная имеет значение null');
+	if (Object.create) return Object.create(p);
+	if (p !== 'object' && p !== 'function') throw console.log('Обект не является прототипом');
+	function f() {};
+	f.prototype = p;
+	return f();
+};
+
+ function classOf(n) {
+    if(n === null) return 'Null';
+    if(n === undefined) return 'Undefined';
+    return toString.call(n).slice(8,-1);
+};
+
+Array.prototype.newMap = function f(func) {
+    result = [];
+    for(i=0;i<this.length;i++){
+        result.push(func.call(this,this[i]));
+    }
+    return result;
+} // функция, принимающая в качестве аргумента функцию, обрабатывающую каждое значение массива, и возвращающая новый массив(клон метода .map());
+
+function Complex(n,i){
+    if(isNaN(n)||isNaN(i)) throw new Error('Аргументы должны быть числами!');
+    this.n = n;
+    this.i = i;
+};
+Complex.prototype.add = function(that){
+    return new Complex(this.n+that.n,this.i+that.i);
+};
+Complex.prototype.mul = function(that){
+    return new Complex(this.n*that.n-this.i*that.i,this.n*that.i+this.i*that.n);
+};
+Complex.prototype.mag = function(){
+    return Math.sqrt(this.n*this.n+this.i*this.i);
+};
+Complex.prototype.neg = function(){
+    return new Complex(-this.n,-this.i);
+};
+Complex.prototype.toString = function(){
+    return "{"+this.n+","+this.i+"}";
+};
+Complex.prototype.equals = function(that){
+    return that != null&&
+    that.constructor === Complex&&
+    that.n === this.n&&that.i === this.i;
+};
+Complex.ZERO = new Complex(0,0);
+Complex.ONE = new Complex(1,0);
+Complex.I = new Complex(0,1);
+Complex.parse = function(s){
+    try{
+        var m = Complex._format.exec(s);
+        return new Complex(parseFloat(m[1],m[2]));
+    } catch(x) {
+        throw new TypeError("Строка "+s+"не может быть преобразованна"+" в комплексное число");
+    }
+};
+Complex.prototype.conj = function(){ return new Complex(this.n,-this.i); };
+//Собственный класс Complex
+
+function constIs(o){
+    if(o===null) return "";
+    switch(o.constructor){
+        case Number: return "Number: "+o;
+        case Strin: return "String: "+"'"+o+"'";
+        case Date: return "Date: "+o;
+        case RegExp: return "Regexp: "+o;
+        case Complex: return "Complex: "+o;
+    }
+};//Функция определяющая конструктор
+
+function itis(o){
+    for(var i=1;i<arguments.length;i++){
+    var arg = arguments[i];
+    if(typeof arg === 'object'){
+        for(var n in arg){
+            if(typeof arg[n]==='function'){
+                if(typeof o[n]!=='function') return false;
+            }}
+        for(var n in o){
+            if(typeof o[n]==='function'){
+                if(typeof arg[n]!=='function') return false;
+            }
+    else if(typeof arg !== 'object') { throw new Error('Введите объект'); };
+        };
+    }
+    };
+return true;
+};//Функция, проверяющая, является ли входящий объект родственником по прототипам текущего
+
+function ifIs(a){
+    for(var i=1;i<arguments.length;i++){
+        var arg = arguments[i];
+        switch(typeof arg){
+            case 'string': if(typeof a[arg]!=='function') continue;return false;
+            case 'function': arg = arg.prototype;
+            case 'object': for(var n in arg){ if(typeof arg[n]!=='function') continue; if(typeof a[n]!=='function') return false; };
+        };
+    };
+return true;
+};//Проверяет принадлежность классу(недоработана)
+
+function Cath(){
+    this.cath = {};
+    this.n = 0;
+    this.add.apply(this,arguments);
+};
+Cath.prototype.add = function(){
+    for(var i=0;i<arguments.length;i++){
+        var arg = arguments[i];
+        if(this.cath.hasOwnProperty(arg)) return arg;
+        var name = this.constructor._name(arg);
+        this.cath[name] = arg;
+        this.n++;
+    }
+};
+Cath._name = function(a){
+    switch(a){
+        case null:return '-'+a;
+        case undefined:return '-'+a;
+        case true:return '-'+a;
+        case false:return '-'+a;
+        default:switch(typeof a){
+            case 'number':return '#'+a;
+            case 'string':return '$'+a;
+            default:return '@'+objId(a);
+        }
+    }
+};
+function objId(o){
+    var id = '|*ID*|';
+    if(this.cath.hasOwnProperty(id)) return i[id];
+    return o[id] = Cath._next++;
+};
+Cath._next = 0;//Функция создает класс - базу кеширумую, пример
+
+function enumeration(namesToValues){
+    var enumeration = function(){ throw "нельзя вызывать ф-цию"; };
+    var proto = enumeration.prototype = {
+        constructor:enumeration,
+        toString:function(){ return this.name; },
+        valueOf:function(){ return this.value; },
+        toJSON:function(){ return this.name; }
+    };
+    enumeration.values = [];
+    for(var name in namesToValues){
+        var e = inherit(proto);
+        e.name = name;
+        e.value = namesToValues[name];
+        enumeration[name] = e;
+        enumeration.values.push(e);
+    };
+    enumeration.foreach = function(f,c){
+        for(var i=0;i<this.values.length;i++) f.call(c,this.values[i]);
+    };
+    return enumeration;
+};//функция создает класс со свои прототипом и конечным колчиством свойств
+
+function timeOf(f){
+    var timestart = new Date();
+    timestart = timestart.getSeconds()*1000 + timestart.getMilliseconds();
+    return (function(){
+        var r = f.apply(this,arguments);
+        var timestop = new Date();
+        timestop = timestop.getSeconds()*1000 + timestop.getMilliseconds();
+        console.log('time to be responde '+timestop - timestart +' ms');
+        return r;
+    }());
+};//функция вычисляющая в миллесекундах выполнение операции
+
+function extend(o){
+    for(var i=1;i<arguments.length;i++){
+        var arg = arguments[i];
+            for(var name in arg){
+                o[name] = arg[name];
+            };
+    };
+return o;
+};//функция, копирующая свойства объектов в первый объект
+
+function Set(){
+    this.catch = {};
+    this.add.apply(this,arguments);
+    this.n = 0;
+};
+Set.prototype.add = function(){
+    for(var i=0;i<arguments.length;i++){
+        var arg = arguments[i];
+        var name = this.constructor._name(arg);
+        if(this.catch[name]) continue;
+        this.catch[name] = arg;
+        this.n++;
+    };
+return this;
+}
+Set._name = function(name){
+    switch(name){
+        case null:return 'n'+name;
+        case undefined:return 'u'+name;
+        case true:return 'b'+name;
+        case false:return 'b'+name;
+        default:switch(typeof name){
+            case 'number':return '№'+name;
+            case 'string':return '$'+name;
+            default:return '@'+this._objectId(name);
+        };
+    };
+};
+Set._objectId = function(name){
+        var ID = '|**ID**|';
+        name[ID] = this._IDnumber;
+        this._IDnumber++;
+        return name[ID];
+};
+Set._IDnumber = 0;
+Set.prototype.remove = function(){
+    var old = [];
+    for(var i=0;i<arguments.length;i++){
+        var arg = arguments[i];
+        if(this.catch.hasOwnProperty(arg)){
+        delete this.catch[arg];
+        console.log(this.catch[arg]);
+        this.n--;
+        old.push(arg);
+        }
+        else{ console.log('consrtuctor is not have '+arg); continue; };
+    }
+console.log('element '+old+' is delete');
+}
+Set.prototype.contains = function(name){
+    return this.catch.hasOwnProperty(name);
+};
+Set.prototype.equals = function(name){
+    return name instanceof this.constructor;
+};
+Set.prototype.size = function(){
+    return this.n;
+};
+Set.prototype.foreach = function(f,context){
+    for(var name in this.catch){
+    console.log(f.call(context,this.catch[name]));
+    };
+};
+
+var newextend = function(o){
+    if(typeof o === 'function'){
+            var for_ = o;
+        for(var i=1;i<arguments.length;i++){
+            for(var name in arguments[i]){
+                for_.prototype[name] = arguments[i][name];
+            };
+        };
+    return for_;
+    };
+};
+
+var Son = newextend(function(){
+    this.catch = {};
+    this.n = 0;
+    this.add.apply(this,arguments);
+},{
+add:function(){
+    for(var i=0;i<arguments.length;i++){
+        var arg = arguments[i];
+        var name = this._name(arg);
+        if(this.catch[name]) continue;
+        this.catch[name] = arg;
+        this.n++;
+    };
+return this;
+},
+_name:function(name){
+    switch(name){
+        case null:return 'n'+name;
+        case undefined:return 'u'+name;
+        case true:return 'b'+name;
+        case false:return 'b'+name;
+        default:switch(typeof name){
+            case 'number':return '№'+name;
+            case 'string':return '$'+name;
+            default:return '@'+this._objectId(name);
+        };
+    };
+},
+_objectId: function(name){
+        var ID = '|**ID**|';
+        name[ID] = this._IDnumber;
+        this._IDnumber++;
+        return name[ID];
+},
+_IDnumber: 0,
+});
+var Mather = newextend(function(){
+    this.catch = {};
+    this.n = 0;
+    this.add.apply(this,arguments);
+},(new Son),{
+foEach:function(f){ for(var name in this.catch){ f.call(this,this.catch[name]); } }
+});
+var Father = newextend(function(){
+    this.catch = {};
+    this.n = 0;
+    this.add.apply(this,arguments);
+},(new Mather),{
+toArray:function(){
+    var array = [];
+    for(var name in this.catch){
+        array.push(this.catch[name]);
+    };
+    return array;
+}
+});
+
+var addId = (function(){
+    var n = 0;
+    return function(o){
+    if(!o['id']){
+        Object.defineProperty(o,'id',{ get:getid });
+        function getid(){ if(!('**id**' in this)) Object.defineProperty(this,'**id**',{ value:n++ }); return this['**id**']; };
+    };
+    return o['**id**'];
+};
+}());//задает объекту уникальный айдишкик
+
+function defprop(){
+    for(var i=0;i<arguments.length;i++){
+        for(var name in arguments[i]){
+            Object.defineProperty(arguments[i],name,{ value:arguments[i][name],enumerable:true,configurable:true,writable:false });
+        };
+    };
+};//функция защищает данные входящих объектов от записи
+
+function hideProps(o){
+    var prop = (arguments.length == 1)
+    ?Object.getOwnPropertyNames(o)
+    :Array.prototype.splice.call(arguments,1);
+prop.forEach(function(n){
+    Object.defineProperty(o,n,{ enumerable:false });
+});
+return o;
+};//делает свойства неперечислимыми
+
+var Range = function(from,to){
+    if(from>to) throw new Error('Значение "от" не может быть больше значения "до"');
+    function getFrom(){ return from };
+    function getTo(){ return to };
+    function setFrom(f){ if(f>=from) from = f; else throw new Error('Новое значение "от" не может быть меньше старого'); };
+    function setTo(f){ if(to>=f) to = f; else throw new Error('Новое значение "до" не может быть больше старого'); };
+    Object.defineProperties(this, {
+        from:{ get:getFrom, set:setFrom, enumerable:true, configurable:false },
+        to:{ get:getTo, set:setTo, enumerable:true, configurable:false }
+    });
+};//простой класс защищенный от записи
+	
+</script>
+
+
+<script type="text/javascript">
+// Клиентский JS
+
+    function timeT(){
+        (function(){
+            var cont = document.getElementById('clock');
+            var now = new Date();
+            cont.innerHTML = now.toLocaleTimeString();
+            setTimeout(timeT,1000);
+        }());
+
+    };
+    window.onload = timeT;
+    function newWindow(){ return window.open("about:blank") };
+
+
+</script>
+
+<script defer type="text/javascript" src="/timetoload.js"></script>
+
+<div id="clock" style="font:bold 2em Tahoma;width:200px;position:absolute;left:30px;bottom:10px;"></div>
+
+<div></div>
+
+<a href="javascript:
+    var e = '', r = '';
+    do {
+        e = prompt('Match: ' + e + '\n' + r + '\n',e);
+        try { r = 'Result: ' + eval(e); }
+        catch(ex) { r = ex; }
+    } while(e)
+        void 0;
+">Math</a>
+<br>
+<a href="javascript:
+    var e = '',r = '';
+    do {
+        e = prompt('SQR: ' + e + '\n' + r);
+        r = 'RESULT: ' + Math.sqrt(e);
+    } while(e) {
+        void 0;
+    }
+">Math.sqrt</a>
+
+<script type="notes">
+
+Text for notes bo JavaScript
+
+</script>
+
+<style type="text/css">
+
+    * { color:#330033; }
+    a { color:blue; }
+
+</style>
+
+<script type="text/javascript">
+
+    document.write("<table>");
+    document.write("<tr><th>n</th><th>n*</th></tr>");
+    function factorial(n){
+    if(n<=1) return n;
+    return n*arguments.callee(n-1);
+    };
+    for(var i=0;i<10;i++){ document.write("<tr><td>"+ i +"</td><td>"+ factorial(i) +"</td></tr>"); };
+    document.write("</table>");
+    document.write("Generate in: "+ new Date().toLocaleString());
+
+    function onLoad(f){
+        if (onLoad.loaded)
+            window.setTimeout(f,0);
+        else if (window.addEventListener)
+            window.addEventListener('load',f,false);
+        else if (window.attachEvent)
+            window.attachEvent('onload',f);
+    };
+
+/*@cc_on
+    @if (@_jscript)
+        alert("In IE");
+    @else*/
+        //убрать alert("In old browser");
+    /*@end
+@*/
+
+</script>
+
+<!--[if IE 6]>
+    Строки EX6
+<![endif]-->
+
+<!--[if lte IE7]>
+    lte - меньше или равно
+<![endif]-->
+
+<!--[if     IE]>
+    Видно во всех браузерах
+<![endif]-->
+
+<script type="text/javascript">
+
+    function inTime(f,time,stop){
+    if(!time) time = 0;
+    if(!stop){ setTimeout(f,time); }
+    else { var end = setInterval(f,time);
+            setTimeout(function(){ clearInterval(end) },stop);
+         }
+    };
+    var n = 5;
+    inTime(function(){ if(n>0) console.log("destroy in "+n--); else console.log("Boom!"); },1000,6050);
+
+    window.onerror = function(msg,url,string){
+    console.log("Error " + window.onerror.error++ + "n callee in addres " + url + " on string " + string + ", this message: " + msg);
+    return true;
+    };
+
+
+    var radio = window.open("radio","radio","width=400,height=100");
+    radio.location = "vk.com";
+
+</script>
+
+    <style type="text/css">
+
+        #button { position:absolute;top:60px;left:300px; }
+
+    </style>
+
+
+<a id="ide" name="tt" href="">cxc</a>
+<iframe class="oldClass" id="frame" src="multiprompt.html">xcxc</iframe>
+<applet name="tt">xcds</applet>
+<form class="newClass" name="tt"></form>
+<iframe src="multiprompt1.html"></iframe>
+
+<p>kjn</p>
+<p><span>eee</span></p>
+<p>p</p>
+<p>ee</p>
+
+<ul id="ee">
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+
+<span class="sparkline" data-ymin="0" data-ymax="10">
+    1 1 1 2 2 3 4 5 <p>5</p> 4 3 5 6 7 7 4 2 1
+</span>
+
+<script type="text/javascript">
+
+function insertBefore(parent,child,n){
+    if(n<0||n>parent.childNodes.length){
+        throw new Error('Введите корректный аргумент!');   
+    }
+    else if(n==parent.childNodes.length) return parent.appendChild(child);
+    else return parent.insertBefore(child,parent.insertBefore[n]);
+};
+
+</script>
+
+<script type="text/javascript">
+
+    (function(){
+        if(document.createElement('div').outerHTML) return;
+
+        function outerHTMLGetter(){
+            var container = document.createElement('div');
+            container.appendChild(this.cloneNode(true));
+
+            return container;
+        }
+
+        function outerHTMLSetter(value){
+            var container = document.createElement('div');
+            container.innerHTML = value;
+            while(container.firstChild)
+                this.parentNode.replace(conainer.firstChild,this);
+            this.parentNode.remove(this);
+        }
+
+        if(Object.defineProperty){
+            Object.defineProperty(this,"outerHTML",{
+                get: outerHTMLGetter,
+                set: outerHTMLSetter,
+                enumerable: false, configurable: true
+            });
+        }
+        else {
+            Element.prototype.__defineGetter__('outerHTML',outerHTMLGetter);
+            Element.prototype.__defineSetter__('outerHTML',outerHTMLSetter);
+        }
+    })());
+
+    function reverse(n){
+
+        var f = document.createDocumentFragment();
+
+        while(n.lastChild) f.appendChild(n.lastChild)
+
+        n.appendChild(f);
+    
+    };
+
+
+
+    var ReadyFunc = (function(){
+        var funcs = [];
+        var ready = false;
+
+            function handler(e){
+                e = event || window.event;
+
+                if(ready) return;
+
+                if(e.type === "readystatechange" && document.readyStare === "complete") return;
+
+                for(var i=0;i<funcs.length;i++)
+                    funcs[i].call(document);
+
+                ready = true;
+                funcs = null;
+            };
+
+            if(document.addEventListener){
+                document.addEventListener('DOMComplateLoad',handler,false);
+                document.addEventListener('readystatechange',handler,false);
+                window.addEventListener('load',handler,false);
+            }
+
+            if(document.attachEvent){
+                document.attachEvent('onreadystatechange',handler);
+                document.attachEvent('onload',handler);
+            }
+
+            return function whenready(f){
+                if(ready) f.call(document);
+                else funcs.push(f);
+            };
+
+    }());
+
+</script>
+
+
+
+</body>
+</html>

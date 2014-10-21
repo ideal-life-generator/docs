@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Mobile</title>
+	<script src="lib/angular.js"></script>
+	<script src="lib/angular-touch.js"></script>
+	<script src="lib/hammer.js"></script>
+	<script src="lib/gestures.js"></script>
+	<script src="app.js"></script>
+</head>
+<body>
+
+	<div ng-controller="GestureController"
+		 id="photowrapper">
+		<div class="cardProps"
+			 hm-tap="tapped($event)">
+			<div class="tradingcard">
+				<img src="http://newdrum-n-bass.ru/_nw/42/s33782163.jpg">
+				<span>Reakte</span>
+			</div>
+			<div class="tradingcard">
+				<img src="http://newdrum-n-bass.ru/_nw/42/s72771946.jpg">
+				<span>Loadstar</span>
+			</div>
+		</div>
+	</div>	
+
+<!-- 	<ul ng-controller="MailController">
+		<li ng-repeat="mail in emails">
+			<div ng-show="!mail.showActions"
+				 ng-swipe-left="mail.showActions=true">
+				<div class="from">
+					From: <span>{{ mail.from }}</span>
+				</div>
+				<div class="body">
+					{{ mail.body }}
+				</div>
+			</div>
+			<div ng-show="mail.showActions"
+				 ng-swipe-right="mail.showActions=false">
+				<ul class="actions">
+					<li><button>Archive</button></li>
+					<li><button>Trash</button></li>
+				</ul>
+			</div>
+		</li>
+	</ul> -->
+
+</body>
+</html>

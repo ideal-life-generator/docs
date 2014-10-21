@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+	<script>
+		angular.module('myApp',[]).
+			provider('NewProvider',{
+				$get: function($http){
+					return {
+						'name':'Vlad'
+					}
+				}
+			}).
+			config(function($provide){
+
+			}).
+			controller('MyController',function($scope,NewProvider){
+				console.log(NewProvider);
+				$scope.data = NewProvider;
+			});
+	</script>
+</head>
+<body>
+	<div ng-controller="MyController">
+		{{ data.name }}
+	</div>
+</body>
+</html>

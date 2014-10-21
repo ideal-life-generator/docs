@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+<style type="text/css">
+
+	img {
+		width:300px;
+		opacity:0;
+		display:none;
+	}
+
+</style>
+
+<p>Здесь будет график:
+	<span class="chart">1 3 2 6 3 2 10 4 3 1 6</span>
+</p>
+
+<div id="menu">
+	<a href="http://vk.com">ссылка1</a>
+	<a href="http://google.com">ссылка2</a>
+</div>
+<br>
+<div id="images">
+	<img src="http://3rdbillion.net/wp-content/uploads/2013/11/fd809ea9537baf7b13bf62e76240d5581.jpg">
+	<img src="http://www.nasa.gov/sites/default/files/images/743348main_Timelapse_Sun_4k.jpg">
+</div>
+
+<script type="text/javascript">
+
+var chart = document.getElementsByClassName('chart');
+
+function addactive(){
+	for(var i=0,item;i<chart.length;i++){
+		item = chart[i];
+		var options = item.innerText||item.textContent;
+		var coord = options.split(' ');
+		var canvas = document.createElement('canvas');
+		canvas.width = coord.length*5;
+		canvas.height = 16;
+		var context = canvas.getContext('2d');
+		context.strokeStyle = '#00FF00';
+		context.beginPath();
+		var X = 0;
+		var Y = coord[0];
+		context.moveTo(X,16-Y);
+		for(var n=0;n<coord.length;n++){
+			X += 5;
+			Y = parseInt(coord[n]);
+			context.lineTo(X,16-Y);
+		};
+		item.innerHTML = "";
+		item.appendChild(canvas);
+		context.stroke();
+	};
+};
+
+addactive();
+
+function clickAnimate(id,oldimg,time){
+var fadeInstart = fadeOutstart = false;
+	var a = document.getElementById('menu').getElementsByTagName('a');
+	var img = document.getElementById(oldimg).getElementsByTagName('img');
+	for(var z=0;z<a.length;z++){
+		(function(e){
+		a[z].onclick = function(){
+		event.preventDefault()
+		var href = this.getAttribute('href');
+		console.log(href)
+		for(var i=0;i<img.length;i++){
+			if(img[e].src!==img[i].src&&parseInt(img[i].style.opacity||window.getComputedStyle(img[i]).opacity) === 1){
+				fadeOut(img[i]);
+			}
+		};
+		fadeIn(img[e],href);
+		};
+	}(z))
+	};
+
+	function fadeIn(images,href){
+		if(!fadeInstart){
+			if(parseInt(images.style.opacity||window.getComputedStyle(images).opacity) === 1){
+				setTimeout(function(){ location = href; },time);
+			}
+			else{
+				fadeInstart = true;
+				var start = new Date().getTime();
+				process();
+				images.style.display = 'inline';
+			}
+		}
+
+			function process(){
+				var now = new Date().getTime();
+				var equal = Math.pow((now-start)/time,2);
+				if(equal<1){
+					images.style.opacity = equal;
+					setTimeout(process,16);
+				}
+				else{
+					images.style.opacity = 1;
+					fadeInstart = false;
+					document.location.href = href;
+				}
+			};
+	};
+	function fadeOut(images){
+		if(!fadeOutstart){
+			fadeOutstart = true;
+			var start = new Date().getTime();
+			process();
+		}
+
+			function process(){
+				var now = new Date().getTime();
+				var equal = Math.pow((now-start)/time,2);
+				if(equal<1){
+					images.style.opacity = 1-equal;
+					setTimeout(process,16);
+				}
+				else{
+					images.style.opacity = 0;
+					images.style.display = 'none';
+					fadeOutstart = false;
+				}
+			};
+	};
+};
+
+clickAnimate('menu','images',900);
+
+</script>
+
+</body>
+</html>

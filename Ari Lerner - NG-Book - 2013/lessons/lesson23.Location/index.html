@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Mobile</title>
+	<script src="lib/angular.js"></script>
+	<script src="lib/angular-translate.js"></script>
+	<script src="lib/angular-translate-loader-url.js"></script>
+	<script src="lib/angular-translate-loader-static-files.js"></script>
+	<script src="lib/angular-gettext.js"></script>
+	<script src="app.js"></script>
+</head>
+<body ng-controller="TranslateController">
+
+	<h1 translate>Hello {{ name }}</h1>
+
+	<h1 translate>One apple</h1>
+
+	<h1 translate
+		translate-n="count"
+		translate-plural="{{ count }} apples">
+		One apple
+	</h1>
+
+	<input type="text" placeholder="{{ 'Username' | translate }}">
+
+<!-- 	<div ng-controller="TranslateController">
+		<div>
+			<button ng-click="changeLanguage('de')" translate="BUTTON_TEXT_DE"></button>
+			<button ng-click="changeLanguage('en')" translate="BUTTON_TEXT_EN"></button>
+		</div>
+		<h2>{{ 'HEADLINE' | translate }}</h2>
+		<p>{{ 'INTRO_TEXT' | translate }}</p>
+	</div> -->
+
+</body>
+</html>

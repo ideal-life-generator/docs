@@ -1,0 +1,497 @@
+<!DOCTYPE HTML>
+<html>
+<meta charset="utf-8">
+<body>
+
+<style>
+
+	* {
+		-moz-user-select:-moz-none;
+		-o-user-select:none;
+		-khtml-user-select:none;
+		-webkit-user-select:none;
+		user-select:none;
+	}
+
+	body {
+		margin:0;
+		height:700px;
+		background-image:url(diagmonds.png);
+		cursor:pointer;
+	}
+
+	#move-block {
+		width:1px;
+		height:1px;
+		background-color:black;
+		position:relative;
+		margin:0 auto;
+	}
+
+	.item {
+		box-shadow:0 0 5px 1px rgba(0,0,0,.5);
+		height:140px;
+		width:250px;
+		cursor:pointer;
+		position:absolute;
+		z-index:10;
+		transition:box-shadow .6s;
+	}
+
+	.active {
+		box-shadow:0 0 10px 5px rgba(255,255,255,1);
+	}
+
+	#content {
+		position:relative;
+		overflow:hidden;
+	}
+
+	.side {
+		color:white;
+		text-align:center;
+		padding-top:200px;
+		position:absolute;
+	}
+
+	.item img {
+		width:250px;
+		height:140px;
+		position:absolute;
+		top:0;
+		left:0;
+		z-index:-1;
+	}
+
+	.item div {
+		color:white;
+		font:bold 1.1em Tahoma;
+		margin:115px 10px 0 0;
+		float:right;
+	}
+
+	.side img {
+		width:500px;
+	}
+
+	.lefth-header {
+		margin-right:16px;
+		position:absolute;
+		left:16px;
+		font:bold 1.9em Tahoma;
+	}
+
+</style>
+
+	<div id="move-block">
+		<div class="item">
+			<div>Zero</div>
+			<img src="doc25011780_178424555.gif">
+		</div>
+		<div class="item">
+			<div>One</div>
+			<img src="tattoo-wallpaper-wallpapers.jpg">
+		</div>
+		<div class="item">
+			<div>Two</div>
+			<img src="ezio.jpg">
+		</div>
+		<div class="item">
+			<div>Three</div>
+			<img src="Ppxau8hQONQ.jpg">
+		</div>
+		<div class="item">
+			<div>Four</div>
+			<img src="ECEnmc1.gif">
+		</div>
+		<div class="item">
+			<div>Five</div>
+			<img src="World_Switzerland_Star_Trails__Berner_Oberland_007914_.jpg">
+		</div>
+		<div class="item">
+			<div>Sex</div>
+			<img src="img1.jpg">
+		</div>
+		<div class="item">
+			<div>Seven</div>
+			<img src="2.jpg">
+		</div>
+		<div class="item">
+			<div>Eith</div>
+			<img src="masterchief.jpg">
+		</div>
+	</div>
+
+	<div id="content">
+		<div class="side"></div>
+		<div class="side"></div>
+		<div class="side"></div>
+	</div>
+
+<script type="text/javascript">
+
+/***************** Верхняя панель *****************/
+var content = document.getElementById('move-block');
+var items = Array.prototype.slice.call(document.getElementsByClassName('item'));
+var length = items.length;
+var sortmap = [
+	{left:-660,top:30},
+	{left:-394,top:30},
+	{left:-124,top:30},
+	{left:146,top:30},
+	{left:414,top:30}
+];
+var lastpageX;
+var countRight = countLeft = true;
+var side,lastside;
+var a = 0;
+var active = true;
+var proc = 0, b = 0;
+var Y = 0;
+
+var map = [];
+function sort(){
+	for(var i=0;i<length;i++){
+		if(i<4){
+			items[i].style.left = sortmap[i+1].left + 'px';
+			items[i].style.top = sortmap[i+1].top + 'px';
+			items[i].style.width = sortmap[i+1].width + 'px';
+			items[i].style.height = sortmap[i+1].height + 'px';
+			items[i].style.border = sortmap[i+1].border;
+			items[i].style.boxShadow = sortmap[i+1].boxShadow;
+			items[i].style.opacity = 1;
+			items[i].style.zIndex = 3;
+		}
+		else if(i===items.length-1){
+			items[i].style.left = sortmap[0].left + 'px';
+			items[i].style.top = sortmap[0].top + 'px';
+			items[i].style.zIndex = 2;
+			items[3].style.zIndex = 2;
+			items[i].style.opacity = 1;
+		}
+		else{
+			items[i].style.left = -660 + 'px';
+			items[i].style.top = 30 + 'px';
+			items[i].style.zIndex = 0;
+			items[i].style.opacity = 0;
+		}
+		if(i===length-1){
+			map[0] = {};
+			map[0].left = parseInt(items[length-1].style.left);
+			map[0].top = parseInt(items[length-1].style.top);
+		}
+		else if(i>1&&i<length-1){
+			map[i-1] = {};
+			map[i-1].left = parseInt(items[i-2].style.left);
+			map[i-1].top = parseInt(items[i-2].style.top);
+			if(i-1<4){
+				map[i-1].width = parseInt(items[i-2].style.width);
+				map[i-1].height = parseInt(items[i-2].style.height);
+				map[i-1].border = items[i-2].style.border;
+				map[i-1].boxShadow = items[i-2].style.boxShadow;
+			}
+		}
+	}
+};
+
+sort();
+
+items.unshift(items.pop());
+items[2].classList.add('active');
+
+
+/***************** Основная панель ****************/
+var main = document.getElementById('content');
+var width = document.documentElement.clientWidth;
+var height = document.body.clientHeight;
+main.style.width = width + 'px';
+main.style.height = height + 'px';
+
+var sides = Array.prototype.slice.call(document.getElementsByClassName('side'));
+var sidelength = sides.length;
+var sidemap = [{left:-width},{left:0},{left:width}];
+function sortside(){
+	for(var i=0;i<sidelength;i++){
+		sides[i].style.width = width + 'px';
+		sides[i].style.height = 300 + 'px';
+		sides[i].style.left = sidemap[i].left + 'px';
+		sides[i].style.top = sidemap[i].top + 'px';
+	}
+};
+sortside();
+
+var equal1 = [];
+for(var i=-150;i<=150;i++) equal1[i] = .5*(1+Math.sin(i/150*Math.PI-.5*Math.PI));
+
+document.body.onmousedown = function(down){
+
+var click = down.pageX,
+
+XML = [],
+XSL = [],
+XST = [],
+
+YMLL = [], YMLR = [],
+YSLL = [], YSLR = [],
+YSTL = [], YSTR = [];
+
+var right = function(){
+	click += 150;
+	items.unshift(items.pop());
+	sides.unshift(sides.pop());
+	items[0].style.zIndex = 2;
+	items[1].style.zIndex = 3;
+	items[4].style.zIndex = 2;
+	items[5].style.opacity = 0;
+	items[6].style.zIndex = 0;
+	items[length-1].style.left = XML[length-1] + YMLL[0] + 'px';
+	items[length-1].style.opacity = 1;
+	items[length-1].style.zIndex = 1;
+	updateY1();
+};
+
+var left = function(){
+	click -= 150;
+	savefinish0();
+	items.push(items.shift());
+	sides.push(sides.shift());
+	items[3].style.zIndex = 3;
+	items[0].style.zIndex = 2;
+	items[4].style.zIndex = 2;
+	items[length-1].style.opacity = 0;
+	items[length-1].style.zIndex = 1;
+	items[5].style.left = XML[5] + YMLR[4] + 'px';
+	items[5].style.opacity = 1;
+	items[5].style.zIndex = 1;
+	updateY0();
+};
+
+	this.onmousemove = function(move){
+
+		if(lastpageX!==move.pageX){
+
+			var equal;
+
+			Y = move.pageX - click;
+			if(lastpageX<move.pageX){
+				side = true;
+				if(lastside!==side){
+					active = true;
+					updateY1();
+					items[length-1].style.left = XML[length-1] + YMLL[0] + 'px';
+					items[length-1].style.opacity = 1;
+					items[length-1].style.zIndex = 1;
+					if(a>0){
+						items.push(items.shift());
+						sides.push(sides.shift());
+						updateY1();
+						click += Y;
+						Y = move.pageX - click;
+					}
+				a++;
+				}
+				if(countRight){
+					countRight = false;
+				}
+				if(Y>75&&active){
+					active = false;
+					items[1].classList.add('active');
+					items[2].classList.remove('active');
+				}
+				if(Y>150){
+					active = true;
+					countRight = true;
+					savefinish1();
+					right();
+					Y = move.pageX - click;
+					proc = (proc + b) % 141;
+					callback(sides[2],items[0]);
+				}
+				equal = equal1[Y];
+
+				/************* Верхняя панель *************/
+
+				items[0].style.left = XML[0] + YMLL[1] * equal + 'px';
+				items[1].style.left = XML[1] + YMLL[2] * equal + 'px';
+				items[2].style.left = XML[2] + YMLL[3] * equal + 'px';
+				items[3].style.left = XML[3] + YMLL[4] * equal + 'px';
+
+				/************* Основная панель *************/
+
+				sides[0].style.left = XSL[0] + YSLL[0] * equal + 'px';
+				sides[1].style.left = XSL[1] + YSLL[1] * equal + 'px';
+
+				document.body.style.backgroundPosition = proc + b * equal + 'px 0px';
+			}
+
+			if(lastpageX>move.pageX){
+				side = false;
+				if(lastside!==side){
+					active = true;
+					updateY0();
+					items[5].style.left = XML[5] + YMLR[4] + 'px';
+					items[5].style.opacity = 1;
+					items[5].style.zIndex = 1;
+					if(a>0){
+						items.unshift(items.pop());
+						sides.unshift(sides.pop());
+						items[6].style.zIndex = 0;
+						updateY0();
+						click += Y;
+						Y = move.pageX - click;
+					}
+				a++;
+				}
+				if(countLeft){
+					countLeft = false;
+				}
+				if(Y<-75&&active){
+					active = false;
+					items[3].classList.add('active');
+					items[2].classList.remove('active');
+				}
+				if(Y<-150){
+					active = true;
+					countLeft = true;
+					savefinish0();
+					left();
+					Y = move.pageX - click;
+					proc = (proc - b) % 141;
+					callback(sides[0],items[4]);
+				}
+				equal = equal1[Y];
+
+				/************* Верхняя панель *************/
+	
+				items[1].style.left = XML[1] + YMLR[0] * equal + 'px';
+				items[2].style.left = XML[2] + YMLR[1] * equal + 'px';
+				items[3].style.left = XML[3] + YMLR[2] * equal + 'px';
+				items[4].style.left = XML[4] + YMLR[3] * equal + 'px';
+
+				/************* Основная панель *************/
+
+				sides[1].style.left = XSL[1] + YSLR[1] * equal + 'px';
+				sides[2].style.left = XSL[2] + YSLR[2] * equal + 'px';
+
+				document.body.style.backgroundPosition = proc + b * Math.sin(Y / 150 * Math.PI / 2) + 'px 0px';
+			}
+		
+		lastside = side;
+		lastpageX = move.pageX;
+		}
+
+	move.stopPropagation();
+	};
+
+this.onmouseup = function(up){
+	this.onmousemove = undefined;
+up.stopPropagation();
+};
+
+var updateX = function(){
+	for(var i=0;i<length;i++){
+		if(i<6){
+			XML[i] = parseInt(items[i].style.left);
+			if(i<3){
+				XSL[i] = parseInt(sides[i].style.left);
+				XST[i] = parseInt(sides[i].style.top);
+			}
+		}
+		if(i===length-1){
+			XML[i] = parseInt(items[i].style.left);
+		}
+	}
+};
+
+var updateY1 = function(){
+	updateX();
+	for(var i=0,n=length-1;i<5;i++,n++){
+		YMLL[i] = map[i].left - XML[n%length];
+		if(i<3){
+			YSLL[i] = sidemap[(i+1)%3].left - XSL[i];
+			YSLR[i] = sidemap[(i+1)%3].top - XST[i];
+		}
+	};
+};
+
+var updateY0 = function(){
+	updateX();
+	for(var i=0;i<5;i++){
+		YMLR[i] = map[i].left - XML[i+1];
+		if(i<3){
+			YSLR[i] = sidemap[(i+2)%3].left - XSL[i];
+			YSTR[i] = sidemap[(i+2)%3].top - XST[i];
+		}
+	};
+};
+
+var savefinish1 = function(){
+
+	/************* Верхняя панель *************/
+
+	items[0].style.left = XML[0] + YMLL[1] + 'px';
+	items[1].style.left = XML[1] + YMLL[2] + 'px';
+	items[2].style.left = XML[2] + YMLL[3] + 'px';
+	items[3].style.left = XML[3] + YMLL[4] + 'px';
+	items[length-1].style.left = XML[length-1] + YMLL[0] + 'px';
+	
+	items[length-1].style.opacity = 1;
+	items[length-1].style.zIndex = 1;
+	
+	/************* Основная панель *************/
+	
+	sides[0].style.left = XSL[0] + YSLL[0] + 'px';
+	sides[1].style.left = XSL[1] + YSLL[1] + 'px';
+	sides[2].style.left = XSL[2] + YSLL[2] + 'px';
+	
+	sides[0].style.top = XST[0] + YSLR[0] + 'px';
+	sides[1].style.top = XST[1] + YSLR[1] + 'px';
+	sides[2].style.top = XST[2] + YSLR[2] + 'px';
+};
+
+var savefinish0 = function(){
+
+	/************* Верхняя панель *************/
+	
+	items[1].style.left = XML[1] + YMLR[0] + 'px';
+	items[2].style.left = XML[2] + YMLR[1] + 'px';
+	items[3].style.left = XML[3] + YMLR[2] + 'px';
+	items[4].style.left = XML[4] + YMLR[3] + 'px';
+	items[5].style.left = XML[5] + YMLR[4] + 'px';
+
+	items[5].style.opacity = 1;
+	items[5].style.zIndex = 1;
+
+	/************* Основная панель *************/
+
+	sides[0].style.left = XSL[0] + YSLR[0] + 'px';
+	sides[1].style.left = XSL[1] + YSLR[1] + 'px';
+	sides[2].style.left = XSL[2] + YSLR[2] + 'px';
+
+	sides[0].style.top = XST[0] + YSTR[0] + 'px';
+	sides[1].style.top = XST[1] + YSTR[1] + 'px';
+	sides[2].style.top = XST[2] + YSTR[2] + 'px';
+};
+
+down.stopPropagation();
+};
+
+var callback = function(cont,that){
+	var content = '<div class="lefth-header">' + that.getElementsByTagName('div')[0].innerHTML + '</div><img src="' + that.getElementsByTagName('img')[0].src + '">';
+	cont.innerHTML = content;
+};
+
+for(var i=0;i<3;i++) callback(sides[i],items[i+1]);
+
+var nodragndrop = function(){
+	var img = document.getElementsByTagName('img');
+	for(var i=0;i<img.length;i++){
+		img[i].ondown = null;
+	}
+};
+nodragndrop();
+
+</script>
+
+</body>
+</html>

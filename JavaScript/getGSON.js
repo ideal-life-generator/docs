@@ -1,0 +1,3 @@
+log(
+function zz(){ alert(); }
+)

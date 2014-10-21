@@ -1,0 +1,324 @@
+<html>
+<head>
+	<title>Animation</title>
+</head>
+<body>
+
+<style class="styles" title="first"; type="text/css">
+
+	* { margin:0;padding:0; }
+	body { background:maroon; }
+	#box { width:40px;height:40px;background:lightgray;margin:160px auto 30px;box-shadow:inset 0 0 3px 0 rgba(0,0,0,.1);border:5px solid rgba(249,255,191,1); }
+
+</style>
+
+	<div class="aa bb cc" id="box"></div>
+
+	<div id="timeset"></div>
+
+
+<script type="text/javascript">
+
+	/*
+	var id = document.querySelectorAll('#entr_cat');
+		for(var n=0;n<id.length;n++){
+			var container = id[n].childNodes;
+			for(var i=0;i<container.length;i++){
+				if(container[i].innerHTML === "PC" || container[i].innerHTML === "PlayStation 3" || container[i].innerHTML === "PlayStation 4" || container[i].	innerHTML === "XBOX 360" || container[i].innerHTML === "XBOX One" || container[i].innerHTML === "WII"){
+					container[i].parentNode.removeChild(container[i]);
+				}
+			}
+		};
+	*/
+
+
+	
+	function to(elt,prop,val,time,callback){
+
+		if(!val) val = 100;
+		if(!time) time = 500;
+			var start = (new Date).getTime(),
+					propVal = window.getComputedStyle(elt);
+						propVal = propVal[prop].substring(0,propVal[prop].length-2);
+
+				a();
+
+				function a(){
+					var now = (new Date).getTime();
+					var elapsed = now-start;
+						var fraction = elapsed/time;
+
+							if(fraction < 1){
+
+								var x = parseInt(propVal)+val*Math.sin(fraction*Math.PI/2);
+
+								elt.style[prop] = x+'px';
+
+									setTimeout(a,Math.min(16,time-elapsed));
+							}
+							else {
+									elt.style[prop] = parseInt(propVal) + val + 'px';
+											if(callback) callback(elt,time);
+										}
+				}
+	};
+
+function fade(elt,time){
+
+			if(!time) time = 600;
+			var val = window.getComputedStyle(elt);
+				val = val.opacity;
+					var out = Math.sqrt,
+						start = (new Date).valueOf();
+				a();
+
+			function a(){
+					var now = (new Date).valueOf();
+					var elapsed = now-start;
+						var reise = elapsed/time;
+
+							if(reise < 1){
+								elt.style.opacity = Math.sin((1-reise)*Math.PI/2);
+
+									setTimeout(a,Math.min(25,elapsed-time));
+								}
+
+									else elt.style.opacity = 0;
+
+			}
+
+	};
+
+
+	function tineSet(obj){
+		for(var name in obj){
+			var elt = document.getElementById('timeset'),
+			n = document.createElement('div');
+				n.id = name;
+			elt.appendChild(n);
+
+			(function(n,timeOut){
+				var time = timeOut.replace(/\:/g,""),
+				name = n.id,
+				second = time.substring(time.length-2,time.length),
+				minute = time.substring(time.length-4,time.length-2) || 0,
+				hour = time.substring(time.length-6,time.length-4) || 0,
+				ID = setInterval(function(){
+					if(second == -1) { minute--, second = 59; }
+					if(minute == -1) { hour--, minute = 59; }
+					n.innerHTML = name + ': ' + " hour: " + hour + " minutes: " + minute + " seconds: " + second--;
+						if(hour == -1) {
+							n.innerHTML = name + ": Time out";
+							clearInterval(ID)
+								};
+				},1000);
+			}(document.getElementById(name),obj[name]));
+		}
+	};
+
+tineSet({timer1:'1:00:00',timer2:'0:01:30',timer3:'5:32:16',timer4:"1:00"});
+
+
+</script>
+
+
+<script type="text/javascript">
+
+	function shake(e,distance,time){
+		if(typeof e === "string") e = document.getElementById(e);
+		if(!time) time = 500;
+		if(!distance) distance = 5;
+
+			var originalStyle = e.style.cssText;
+			e.style.position = "relative";
+			var start = (new Date).getTime();
+			animate();
+
+				function animate(){
+					var now = (new Date).getTime();
+					var elapsed = now-start;
+					var fraction = elapsed/time;
+					console.log(elapsed,fraction,Math.sin(fraction*4*Math.PI),distance*Math.sin(fraction*4*Math.PI),e.style.left);
+
+						if(fraction < 1){
+							var x = distance*Math.sin(fraction*4*Math.PI);
+							e.style.left = x + 'px';
+							setTimeout(animate,Math.min(25,time-elapsed));
+						}
+						else {
+							e.style.cssText = originalStyle;
+						}
+				};
+
+	};
+
+</script>
+
+<script type="text/javascript">
+
+	Element.prototype.getClassNames = function(){
+		return new ClassNames(this);
+	}
+
+	function ClassNames(self){
+		this.classes = self.className.split(" ");
+		this.element = self;
+	};
+
+	ClassNames.prototype.add = function(name){
+		if(this.classes.indexOf(name) === -1){
+			this.classes.push(name);
+			this.apply();
+		}
+	};
+
+	ClassNames.prototype.remove = function(name){
+		var index = this.classes.indexOf(name);
+			if(index !== -1){
+				this.classes.splice(index,1);
+				this.apply();
+			}
+	};
+
+	ClassNames.prototype.contains = function(name){
+		if(this.classes.indexOf(name) >= 0) return true;
+		return false;
+	};
+
+	ClassNames.prototype.toggle = function(name){
+		var index = this.classes.indexOf(name);
+		if(index === -1) { this.add(name); }
+			else this.remove(name);
+	};
+
+	ClassNames.prototype.apply = function(){
+		this.element.className = this.classes.join(" ");
+	};
+
+</script>
+
+<style title="from-gradient" type="text/css">
+
+	#gradient { position:absolute;right:6px;top:6px;width:30px;height:30px;border-radius:50%;cursor:pointer;color:#e0eee0;font:bold 1.2em Tahoma;line-height:40px;text-align:center;box-shadow:0 0 3px 1px rgba(255,255,255,.3);text-shadow:0 0 5px rgba(0,0,0,1); }
+
+	/* document.styleSheets[1].cssRules[0].style.backgroundImage */
+
+</style>
+
+<div id="gradient"></div>
+
+<script>
+
+	function grad(elt,gradient,time){
+		var	value = gradient.match(/\d+\%/g),
+				left = value[0],right = value[1],val,elapsed,dole,z,
+					start = (new Date).valueOf();
+					function e(){
+						elapsed = (new Date).valueOf() - start;
+						dole = 100-((Math.abs(Math.sin(elapsed/time*Math.PI))*50)+30);
+						left = dole + "%";
+						result = gradient.replace(/\d+\%/,left);
+						elt.style.background = result;
+							setTimeout(e,16);
+					}
+	e();
+	};
+
+	grad(document.getElementById('gradient'),"radial-gradient(circle closest-side,#00FFFF 0%, #DC143C 100%)",3000);
+
+	function sort(array){
+    var i=0,n,b,result = [];
+    for(;i<array.length;i++){
+        var f = array[i];
+            for(n=i+1;n<array.length;n++){
+                var o = array[n];
+                    if(o>i){
+                        b = o;
+                    }
+                    else b = array[n];
+            }
+result.push(b);
+    };
+};
+
+</script>
+
+<a id="aa" href="vk.com">vk.com</a>
+
+<style type="text/css">
+
+	#imgFirst { border:3px solid lightyellow;margin:0 auto;display:block;width:500px;height:300px; }
+
+</style>
+
+<img id="imgFirst" src="http://www.sunhome.ru/UsersGallery/wallpapers/64/4230837.jpg">
+
+<script type="text/javascript">
+
+	document.getElementById("imgFirst").addEventListener("click",client,true);
+
+	function client(){
+		console.log(event.clientY);
+		event.stopPropagation();
+	};
+
+</script>
+
+<script type="text/javascript">
+
+
+	function addEvent(elt,evnt,funct){
+		if(elt.addEventListener)
+			elt.addEventListener(evnt,funct,false);
+		else
+			elt.attachEvent("on"+evnt,function(event){
+									return elt.call(elt,event);
+							});
+	};
+
+	function func(){
+		alert();
+	};
+
+</script>
+
+
+<input id="text" type="text">
+
+<script type="text/javascript">
+
+	text.onkeypress = function(){ if(event.key == "w") return false; };
+
+
+
+			document.getElementById('imgFirst').onmouseout = function(){
+				console.log(event.relatedTarget);
+			}
+
+</script>
+
+
+<script type="text/javascript">
+
+var whenReady = (function(){
+	var funcs = [];
+	var ready = false;
+
+		function handler(event){
+			if(ready) return;
+
+		}
+
+}());
+console.log(document.readyState);
+console.log(document.readyState);
+console.log(document.readyState);
+
+
+</script>
+
+<input type="file">
+
+
+</body>
+</html>

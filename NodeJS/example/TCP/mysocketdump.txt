@@ -1,0 +1,10 @@
+GET / HTTP/1.1
+Host: localhost:3000
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4
+Cookie: sid=6d0ceaea27ad2a28139fbb4836991e2c90bb9f4c5a797dd363c728f2d0198c1ad9231cde40dd18e5d5478c7e7e84f18fed91c0f5e949fb3a19a6d2c13b0f3989
+

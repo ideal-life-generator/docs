@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title>$resource</title>
+	<script src="lib/angular.min.js"></script>
+	<script src="lib/angular-resource.min.js"></script>
+<script>
+	
+	angular.module('resourceApp',['ngResource']).
+		factory('resourcesService',function($resource){
+			return $resource('lesson:n.:title.html',{
+				n: '@number',
+				title: '@title'
+			},{
+				sendMail: {
+					method: 'POST',
+					interceptor: {}
+				}
+			});
+		}).
+		controller('ResourceController',function($scope,resourcesService){
+			$scope.$watch('content ',function(){
+				resourcesService.sendMail({ number: 6, title: 'Directive' });
+				// resourcesService.get({ n: $scope.nn, title: $scope.content },function(data){
+				// 	$scope.cont = data;
+				// },function(error){
+				// 	$scope.cont = error;
+				// });
+			});
+		});
+
+</script>
+</head>
+<body ng-app="resourceApp">
+	<div ng-controller="ResourceController" ng-init="content = 'Controller'; nn = '3'">
+		<select ng-model="nn">
+			<option ng-repeat="n in [1,2,3,4,5,6,7,8,9,10,11]">{{ n }}</option>
+		</select>
+		<input ng-model="content">
+		<div>
+			{{ cont }}
+		</div>
+	</div>
+</body>
+</html>
+
+<!-- Эти теплые летние вечера. Когда можно сесть на балконе, включить любимую музыку, и наблюдать за звездами.
+	 Одиночество моё проклятие, но и моя радость -->

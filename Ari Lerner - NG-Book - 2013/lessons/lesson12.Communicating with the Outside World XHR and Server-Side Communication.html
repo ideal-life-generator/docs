@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>Simple app</title>
+	<script src="lib/angular.min.js"></script>
+	<script>
+		angular.module('myApp',[]).
+			constant('responce',function($http){
+				$http({
+					method: 'GET',
+					url: 'server/server.json',
+				}).success(function(data,status,headers,config){
+					return data;
+				}).error(function(data,status,headers,config){
+					return undefined;
+				});
+			}).
+			controller('MyController',function($scope,responce){
+				$scope.data = responce;
+			});
+	</script>
+</head>
+<body ng-controller="MyController">
+	{{ data }}
+</body>
+</html>
